@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="th">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="shortcut icon"
+      href="https://www.iconpacks.net/icons/1/free-heart-icon-431-thumb.png"
+      type="image/x-icon"
+    />
+    <title>💕 มีเรื่องจะถาม...</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #fce4ec, #f8bbd0, #f48fb1);
+        overflow: hidden;
+      }
+
+      /* Floating hearts background */
+      .hearts-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+        overflow: hidden;
+      }
+
+      .floating-heart {
+        position: absolute;
+        bottom: -50px;
+        font-size: 20px;
+        animation: floatUp linear infinite;
+        opacity: 0.3;
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 0.6;
+        }
+        100% {
+          transform: translateY(-110vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      .container {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        padding: 40px 30px;
+        max-width: 500px;
+        width: 90%;
+      }
+
+      .hidden {
+        display: none !important;
+      }
+
+      /* Card styling */
+      .card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        padding: 40px 30px;
+        box-shadow: 0 20px 60px rgba(233, 30, 99, 0.2);
+        backdrop-filter: blur(10px);
+        animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      }
+
+      @keyframes popIn {
+        0% {
+          transform: scale(0.5);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #c2185b;
+        margin-bottom: 20px;
+        line-height: 1.4;
+      }
+
+      .subtitle {
+        font-size: 16px;
+        color: #e91e63;
+        margin-bottom: 10px;
+        opacity: 0.8;
+      }
+
+      .gif-container {
+        margin: 20px auto;
+        width: 200px;
+        height: 200px;
+        border-radius: 16px;
+        overflow: hidden;
+      }
+
+      .gif-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Button area */
+      .button-area {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        margin-top: 30px;
+        min-height: 80px;
+        flex-wrap: wrap;
+      }
+
+      .btn-yes {
+        background: linear-gradient(135deg, #ec407a, #e91e63, #c2185b);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 16px 40px;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+        white-space: nowrap;
+      }
+
+      .btn-yes:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 25px rgba(233, 30, 99, 0.6);
+      }
+
+      .btn-no {
+        background: linear-gradient(135deg, #90a4ae, #78909c, #607d8b);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 16px 40px;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        white-space: nowrap;
+      }
+
+      .btn-no:hover {
+        background: linear-gradient(135deg, #78909c, #607d8b, #546e7a);
+      }
+
+      /* No click counter */
+      .no-counter {
+        margin-top: 15px;
+        font-size: 14px;
+        color: #e91e63;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .no-counter.visible {
+        opacity: 1;
+      }
+
+      /* Love page */
+      .love-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        padding: 40px 30px;
+        box-shadow: 0 20px 60px rgba(233, 30, 99, 0.3);
+        animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      }
+
+      .love-title {
+        font-size: 32px;
+        font-weight: bold;
+        color: #c2185b;
+        margin-bottom: 15px;
+        line-height: 1.4;
+      }
+
+      .love-text {
+        font-size: 18px;
+        color: #e91e63;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+
+      .love-gif {
+        width: 250px;
+        height: 250px;
+        border-radius: 16px;
+        overflow: hidden;
+        margin: 20px auto;
+      }
+
+      .love-gif img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* No page (if they keep pressing no) */
+      .sad-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 24px;
+        padding: 40px 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+      }
+
+      .sad-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #546e7a;
+        margin-bottom: 15px;
+      }
+
+      .sad-text {
+        font-size: 16px;
+        color: #78909c;
+        margin-bottom: 20px;
+      }
+
+      .btn-back {
+        background: linear-gradient(135deg, #ec407a, #e91e63);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        padding: 14px 36px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 15px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(233, 30, 99, 0.4);
+      }
+
+      .btn-back:hover {
+        transform: scale(1.05);
+      }
+
+      /* Confetti */
+      .confetti-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 10;
+        overflow: hidden;
+      }
+
+      .confetti {
+        position: absolute;
+        top: -10px;
+        width: 10px;
+        height: 10px;
+        animation: confettiFall linear forwards;
+      }
+
+      @keyframes confettiFall {
+        0% {
+          transform: translateY(0) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(100vh) rotate(720deg);
+          opacity: 0;
+        }
+      }
+
+      /* Shake animation for No button area */
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+      }
+
+      .shake {
+        animation: shake 0.3s ease;
+      }
+
+      @media (max-width: 480px) {
+        .title {
+          font-size: 22px;
+        }
+        .gif-container {
+          width: 160px;
+          height: 160px;
+        }
+        .btn-yes, .btn-no {
+          padding: 12px 28px;
+          font-size: 16px;
+        }
+        .love-title {
+          font-size: 24px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Floating hearts background -->
+    <div class="hearts-bg" id="heartsBg"></div>
+
+    <!-- ===== หน้าหลัก: ถามคำถาม ===== -->
+    <div id="mainPage" class="container">
+      <div class="card">
+        <p class="subtitle">มีเรื่องจะถามจริงจังนะ...</p>
+        <h1 class="title">เธอรักฉันไหม? 💕</h1>
+
+        <div class="gif-container">
+          <img
+            id="mainGif"
+            src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjI4MjJiNGE5MjFmYjg5ODIwZDFlMjQ3NjZmZmUyZGExMWJiZDdhZSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/MDJ9IbxxvDUQM/giphy.gif"
+            alt="cute bear"
+          />
+        </div>
+
+        <div class="button-area">
+          <button id="yesBtn" class="btn-yes" onclick="handleYes()">
+            รักก 💖
+          </button>
+          <button id="noBtn" class="btn-no" onclick="handleNo()">
+            ไม่รัก 💔
+          </button>
+        </div>
+
+        <div id="noCounter" class="no-counter"></div>
+      </div>
+    </div>
+
+    <!-- ===== หน้ากด Yes ===== -->
+    <div id="lovePage" class="container hidden">
+      <div class="love-card">
+        <h1 class="love-title">ยิ้มเลยยย 🥰💕</h1>
+        <div class="love-gif">
+          <img
+            src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZmI5NGIxN2FhNGNiMmI2OTQ1MTNiN2U5NTk4ZTlmM2Y1Y2M0ZmQ3NiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xTiTnMhJTwNHChdTZS/giphy.gif"
+            alt="love"
+          />
+        </div>
+        <p class="love-text">
+          เย้ๆๆๆ!! ฉันก็รักเธอที่สุดเลยนะ 💗<br />
+          รักเธอมากกว่าที่คำพูดจะบอกได้ 🌹
+        </p>
+      </div>
+    </div>
+
+    <!-- ===== หน้ากด No จนหมด ===== -->
+    <div id="sadPage" class="container hidden">
+      <div class="sad-card">
+        <h1 class="sad-title">😢 เศร้าจัง...</h1>
+        <div class="gif-container" style="margin: 20px auto;">
+          <img
+            src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMTVhZjRjYThmMTRmNzEzNDNkNDQ5ZTExMjczZTA3NDkzNzlhNjZmMiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/OPU6wzx8JrHna/giphy.gif"
+            alt="sad"
+          />
+        </div>
+        <p class="sad-text">ไม่เป็นไร... แต่ลองคิดอีกทีนะ? 🥺</p>
+        <button class="btn-back" onclick="goBack()">
+          ขอคิดใหม่! 💖
+        </button>
+      </div>
+    </div>
+
+    <!-- Confetti container -->
+    <div id="confettiContainer" class="confetti-container"></div>
+
+    <script>
+      // ===== Config =====
+      let noCount = 0;
+      const maxNoClicks = 10;
+      let yesScale = 1;
+
+      // ข้อความที่จะเปลี่ยนทุกครั้งที่กด No
+      const noTexts = [
+        "ไม่รัก 💔",
+        "แน่ใจเหรอ? 🤔",
+        "คิดดีๆนะ 😅",
+        "จริงๆเหรอ? 🥺",
+        "ลองคิดใหม่สิ 😢",
+        "ไม่รักจริงป่าว? 😭",
+        "กดใหม่นะ~ 💗",
+        "ได้โปรดด 🙏",
+        "ฉันจะร้องไห้นะ 😿",
+        "โอเค... 😞",
+      ];
+
+      // GIF ที่เปลี่ยนตามจำนวนการกด No
+      const gifStages = [
+        "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNjI4MjJiNGE5MjFmYjg5ODIwZDFlMjQ3NjZmZmUyZGExMWJiZDdhZSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/MDJ9IbxxvDUQM/giphy.gif",
+        "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMDFjN2IyNzQwNjFjNzBiYTZlOTA2ZTUyZTNiNGRlZTgyNDE4ZGI3MCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/tZyxxR4lUIRnTgIzl9/giphy.gif",
+        "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYmFjZjBkODVlZDI0NjMwYWJlZmIyOGM5ZTQ5NjIxNDU0Y2FkNzQ1OSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/bEVKYB487Lqxy/giphy.gif",
+        "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMTVhZjRjYThmMTRmNzEzNDNkNDQ5ZTExMjczZTA3NDkzNzlhNjZmMiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/OPU6wzx8JrHna/giphy.gif",
+      ];
+
+      // ===== Floating Hearts =====
+      function createFloatingHearts() {
+        const bg = document.getElementById("heartsBg");
+        const hearts = ["💕", "💗", "💖", "💝", "❤️", "🩷", "🤍"];
+        for (let i = 0; i < 20; i++) {
+          const heart = document.createElement("div");
+          heart.className = "floating-heart";
+          heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+          heart.style.left = Math.random() * 100 + "%";
+          heart.style.fontSize = Math.random() * 20 + 14 + "px";
+          heart.style.animationDuration = Math.random() * 8 + 6 + "s";
+          heart.style.animationDelay = Math.random() * 10 + "s";
+          bg.appendChild(heart);
+        }
+      }
+      createFloatingHearts();
+
+      // ===== Handle Yes =====
+      function handleYes() {
+        showPage("lovePage");
+        launchConfetti();
+        document.body.style.background =
+          "linear-gradient(135deg, #fce4ec, #f8bbd0, #f48fb1)";
+      }
+
+      // ===== Handle No =====
+      function handleNo() {
+        noCount++;
+        const noBtn = document.getElementById("noBtn");
+        const yesBtn = document.getElementById("yesBtn");
+        const mainGif = document.getElementById("mainGif");
+        const counter = document.getElementById("noCounter");
+
+        if (noCount >= maxNoClicks) {
+          showPage("sadPage");
+          return;
+        }
+
+        // เปลี่ยนข้อความปุ่ม No
+        noBtn.textContent = noTexts[Math.min(noCount, noTexts.length - 1)];
+
+        // ปุ่ม Yes ใหญ่ขึ้น
+        yesScale += 0.15;
+        yesBtn.style.transform = `scale(${yesScale})`;
+
+        // ปุ่ม No เล็กลง
+        const noScale = Math.max(0.4, 1 - noCount * 0.06);
+        noBtn.style.transform = `scale(${noScale})`;
+
+        // เปลี่ยน GIF ตามจำนวนครั้ง
+        if (noCount < 3) {
+          mainGif.src = gifStages[0];
+        } else if (noCount < 5) {
+          mainGif.src = gifStages[1];
+        } else if (noCount < 8) {
+          mainGif.src = gifStages[2];
+        } else {
+          mainGif.src = gifStages[3];
+        }
+
+        // Shake animation
+        noBtn.classList.add("shake");
+        setTimeout(() => noBtn.classList.remove("shake"), 300);
+
+        // แสดง counter
+        counter.classList.add("visible");
+        counter.textContent = `กด "ไม่" ไปแล้ว ${noCount} ครั้ง... 😢`;
+      }
+
+      // ===== Page Navigation =====
+      function showPage(pageId) {
+        document.getElementById("mainPage").classList.add("hidden");
+        document.getElementById("lovePage").classList.add("hidden");
+        document.getElementById("sadPage").classList.add("hidden");
+        document.getElementById(pageId).classList.remove("hidden");
+      }
+
+      function goBack() {
+        noCount = 0;
+        yesScale = 1;
+        const noBtn = document.getElementById("noBtn");
+        const yesBtn = document.getElementById("yesBtn");
+        noBtn.textContent = noTexts[0];
+        noBtn.style.transform = "scale(1)";
+        yesBtn.style.transform = "scale(1)";
+        document.getElementById("noCounter").classList.remove("visible");
+        document.getElementById("mainGif").src = gifStages[0];
+        showPage("mainPage");
+      }
+
+      // ===== Confetti =====
+      function launchConfetti() {
+        const container = document.getElementById("confettiContainer");
+        const colors = [
+          "#e91e63",
+          "#f48fb1",
+          "#ff80ab",
+          "#ff4081",
+          "#f50057",
+          "#c2185b",
+          "#ffd54f",
+          "#ff6f00",
+        ];
+        const shapes = ["💕", "💖", "💗", "✨", "🎉", "💝", "❤️"];
+
+        for (let i = 0; i < 60; i++) {
+          setTimeout(() => {
+            const confetti = document.createElement("div");
+            confetti.className = "confetti";
+
+            if (Math.random() > 0.4) {
+              confetti.textContent =
+                shapes[Math.floor(Math.random() * shapes.length)];
+              confetti.style.fontSize = Math.random() * 16 + 12 + "px";
+            } else {
+              confetti.style.width = Math.random() * 10 + 5 + "px";
+              confetti.style.height = Math.random() * 10 + 5 + "px";
+              confetti.style.backgroundColor =
+                colors[Math.floor(Math.random() * colors.length)];
+              confetti.style.borderRadius =
+                Math.random() > 0.5 ? "50%" : "2px";
+            }
+
+            confetti.style.left = Math.random() * 100 + "%";
+            confetti.style.animationDuration = Math.random() * 2 + 2 + "s";
+            confetti.style.animationDelay = Math.random() * 0.5 + "s";
+            container.appendChild(confetti);
+
+            setTimeout(() => confetti.remove(), 4500);
+          }, i * 50);
+        }
+      }
+    </script>
+  </body>
+</html>
